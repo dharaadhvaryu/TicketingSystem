@@ -28,7 +28,7 @@ urlpatterns = [
     ),
 
     path(
-        '/',
+        '',
         dashboard,
         name='dashboard'
     ),
