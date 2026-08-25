@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Service Desk Dashboard</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 230px;
+            background: #172033;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 35px;
+            text-align: center;
+        }
+
+        .menu a {
+            display: block;
+            padding: 13px 15px;
+            color: #d9dfeb;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
+
+        .menu a:hover {
+            background: #27354f;
+            color: white;
+        }
+
+        /* MAIN */
+
+        .main {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .topbar h1 {
+            font-size: 28px;
+        }
+
+        .user {
+            background: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+        }
+
+        /* CARDS */
+
+        .cards {
+            display: grid;
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow:
+                0 2px 8px
+                rgba(0,0,0,0.06);
+        }
+
+        .card-title {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .card-number {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        /* TABLE */
+
+        .panel {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow:
+                0 2px 8px
+                rgba(0,0,0,0.06);
+        }
+
+        .panel h2 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            color: #777;
+            font-size: 13px;
+        }
+
+        .priority {
+            font-weight: bold;
+        }
+
+        .high {
+            color: #d9534f;
+        }
+
+        .medium {
+            color: #f0ad4e;
+        }
+
+        .low {
+            color: #5cb85c;
+        }
+
+        @media(max-width: 900px) {
+
+            .cards {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .sidebar {
+                width: 180px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            SERVICE DESK
+        </div>
+
+        <div class="menu">
+
+    <a href="{% url 'dashboard' %}">
+        🏠 Dashboard
+    </a>
+
+    <a href="{% url 'ticket_list' %}">
+        🎫 Tickets
+    </a>
+
+    <a href="#">
+        📋 My Tasks
+    </a>
+
+    <a href="#">
+        🏢 Companies
+    </a>
+
+            <a href="#">
+                📊 Reports
+            </a>
+			
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <div class="topbar">
+
+            <h1>
+                Dashboard
+            </h1>
+
+            <div class="user">
+
+                👤
+                {{ request.user.username }}
+
+            </div>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+
+        <div class="cards">
+
+            <div class="card">
+
+                <div class="card-title">
+                    Total Tickets
+                </div>
+
+                <div class="card-number">
+                    {{ total_tickets }}
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    Open Tickets
+                </div>
+
+                <div class="card-number">
+                    {{ open_tickets }}
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    My Tickets
+                </div>
+
+                <div class="card-number">
+                    {{ my_tickets }}
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    My Tasks
+                </div>
+
+                <div class="card-number">
+                    {{ my_tasks }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RECENT TICKETS -->
+
+        <div class="panel">
+
+            <h2>
+                Recent Tickets
+            </h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Ticket
+                        </th>
+
+                        <th>
+                            Company
+                        </th>
+
+                        <th>
+                            Title
+                        </th>
+
+                        <th>
+                            Priority
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for ticket in recent_tickets %}
+
+                    <tr>
+
+                        <td>
+                            {{ ticket.ticket_number }}
+                        </td>
+
+                        <td>
+                            {{ ticket.company.company_name }}
+                        </td>
+
+                        <td>
+                            {{ ticket.title }}
+                        </td>
+
+                        <td class="priority
+                            {% if ticket.priority == 'HIGH' %}
+                                high
+                            {% elif ticket.priority == 'MEDIUM' %}
+                                medium
+                            {% else %}
+                                low
+                            {% endif %}">
+
+                            {{ ticket.get_priority_display }}
+
+                        </td>
+
+                        <td>
+                            {{ ticket.get_status_display }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="5">
+                            No tickets available.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}Service Desk{% endblock %}
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        .navbar {
+            height: 64px;
+            background: #172033;
+            color: white;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 30px;
+
+            justify-content: space-between;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 18px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+			padding: 10px;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .username {
+            font-size: 14px;
+        }
+
+        .logout {
+            color: white;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 7px 12px;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        .logout:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .page-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        @media(max-width: 700px) {
+
+            .navbar {
+                padding: 0 15px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .page-container {
+                padding: 20px 15px;
+            }
+
+        }
+		.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 14px;
+    color: #ffffff;
+    text-decoration: none;
+	
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 6px;
+}
+
+
+    </style>
+
+</head>
+
+<body>
+
+
+<nav class="navbar">
+
+    <div class="nav-left">
+
+        <div class="brand">
+            SERVICE DESK
+        </div>
+
+        <div class="nav-links">
+		
+		    <a href="{% url 'dashboard' %}">
+				🏠 Home
+			</a>
+
+            <a href="{% url 'ticket_list' %}">
+                Tickets
+            </a>
+
+            <a href="{% url 'ticket_create' %}">
+                + Create Ticket
+            </a>
+			
+			
+			
+
+        </div>
+
+    </div>
+
+
+    <div class="user-area">
+
+        <span class="username">
+
+            👤 {{ request.user.username }}
+
+        </span>
+
+        <a
+            href="{% url 'logout' %}"
+            class="logout"
+        >
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<div class="page-container">
+
+    {% block content %}
+
+    {% endblock %}
+
+</div>
+
+
+</body>
+
+</html>

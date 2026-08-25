@@ -1,0 +1,827 @@
+{{% extends "base.html" %}
+
+{% block title %}
+{{ ticket.ticket_number }} - Service Desk
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+    .ticket-page {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    /* HEADER */
+
+    .ticket-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 30px;
+    }
+
+    .ticket-header h1 {
+        margin: 0 0 8px 0;
+        font-size: 30px;
+        color: #172033;
+    }
+
+    .ticket-title {
+        color: #666;
+        font-size: 17px;
+    }
+
+    .back-link {
+        text-decoration: none;
+        color: #172033;
+        font-weight: bold;
+    }
+
+    /* LAYOUT */
+
+    .ticket-layout {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 25px;
+    }
+
+    /* PANELS */
+
+    .panel {
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .panel h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #172033;
+        font-size: 20px;
+    }
+
+    /* DETAILS */
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .detail-item {
+        padding-bottom: 10px;
+    }
+
+    .detail-label {
+        color: #777;
+        font-size: 13px;
+        margin-bottom: 5px;
+    }
+
+    .detail-value {
+        font-size: 15px;
+        font-weight: 500;
+    }
+
+    /* DESCRIPTION */
+
+    .description {
+        line-height: 1.6;
+        color: #444;
+        white-space: pre-wrap;
+    }
+
+    /* STATUS / PRIORITY */
+
+    .status-badge,
+    .priority-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 15px;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .status-badge {
+        background: #e8f1ff;
+        color: #1756a9;
+    }
+
+    .priority-badge {
+        background: #fff1c9;
+        color: #805b00;
+    }
+
+    /* FORMS */
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 7px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    select,
+    textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #d2d7df;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+
+    textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .button {
+        background: #172033;
+        color: white;
+        border: none;
+        padding: 11px 18px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .button:hover {
+        background: #27354f;
+    }
+
+    /* COMMENTS */
+
+    .comment {
+        border-bottom: 1px solid #eee;
+        padding: 15px 0;
+    }
+
+    .comment:last-child {
+        border-bottom: none;
+    }
+
+    .comment-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+
+    .comment-author {
+        font-weight: bold;
+        color: #172033;
+    }
+
+    .comment-date {
+        color: #888;
+        font-size: 12px;
+    }
+
+    .comment-type {
+        font-size: 12px;
+        margin-bottom: 8px;
+        color: #666;
+    }
+
+    .comment-message {
+        line-height: 1.5;
+        white-space: pre-wrap;
+    }
+
+    /* ACTIVITY */
+
+    .activity {
+        border-left: 3px solid #172033;
+        padding: 8px 0 8px 15px;
+        margin-bottom: 15px;
+    }
+
+    .activity-description {
+        font-size: 14px;
+    }
+
+    .activity-date {
+        color: #888;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 850px) {
+
+        .ticket-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .details-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .ticket-header {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+    }
+
+</style>
+
+
+<div class="ticket-page">
+
+    <!-- ========================================== -->
+    <!-- PAGE HEADER -->
+    <!-- ========================================== -->
+
+    <div class="ticket-header">
+
+        <div>
+
+            <h1>
+                {{ ticket.ticket_number }}
+            </h1>
+
+            <div class="ticket-title">
+                {{ ticket.title }}
+            </div>
+
+        </div>
+
+        <a href="{% url 'ticket_list' %}" class="back-link">
+            ← Back to Tickets
+        </a>
+
+    </div>
+
+
+    <div class="ticket-layout">
+
+        <!-- ====================================== -->
+        <!-- LEFT COLUMN -->
+        <!-- ====================================== -->
+
+        <div>
+
+
+            <!-- TICKET INFORMATION -->
+
+            <div class="panel">
+
+                <h2>Ticket Information</h2>
+
+                <div class="details-grid">
+
+                    <div class="detail-item">
+
+                        <div class="detail-label">
+                            Company
+                        </div>
+
+                        <div class="detail-value">
+                            {{ ticket.company.company_name }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <div class="detail-label">
+                            Created By
+                        </div>
+
+                        <div class="detail-value">
+
+                            {% if ticket.created_by %}
+                                {{ ticket.created_by.username }}
+                            {% else %}
+                                Unknown
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <div class="detail-label">
+                            Assigned To
+                        </div>
+
+                        <div class="detail-value">
+
+                            {% if ticket.assigned_to %}
+                                {{ ticket.assigned_to.username }}
+                            {% else %}
+                                Unassigned
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <div class="detail-label">
+                            Priority
+                        </div>
+
+                        <div class="detail-value">
+
+                            <span class="priority-badge">
+                                {{ ticket.get_priority_display }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <div class="detail-label">
+                            Status
+                        </div>
+
+                        <div class="detail-value">
+
+                            <span class="status-badge">
+                                {{ ticket.get_status_display }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <div class="detail-label">
+                            Created
+                        </div>
+
+                        <div class="detail-value">
+
+                            {{ ticket.created_at|date:"d M Y H:i" }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-item">
+
+                        <div class="detail-label">
+                            Due Date
+                        </div>
+
+                        <div class="detail-value">
+
+                            {% if ticket.due_date %}
+                                {{ ticket.due_date|date:"d M Y H:i" }}
+                            {% else %}
+                                Not set
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    {% if ticket.resolved_at %}
+
+                    <div class="detail-item">
+
+                        <div class="detail-label">
+                            Resolved At
+                        </div>
+
+                        <div class="detail-value">
+
+                            {{ ticket.resolved_at|date:"d M Y H:i" }}
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    {% if ticket.closed_at %}
+
+                    <div class="detail-item">
+
+                        <div class="detail-label">
+                            Closed At
+                        </div>
+
+                        <div class="detail-value">
+
+                            {{ ticket.closed_at|date:"d M Y H:i" }}
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="panel">
+
+                <h2>Description</h2>
+
+                <div class="description">
+
+                    {{ ticket.description }}
+
+                </div>
+
+            </div>
+
+
+            <!-- CONVERSATION -->
+
+            <div class="panel">
+
+                <h2>Conversation</h2>
+
+                {% for comment in comments %}
+
+                    <div class="comment">
+
+                        <div class="comment-header">
+
+                            <span class="comment-author">
+
+                                {% if comment.author %}
+                                    {{ comment.author.username }}
+                                {% else %}
+                                    Unknown User
+                                {% endif %}
+
+                            </span>
+
+                            <span class="comment-date">
+
+                                {{ comment.created_at|date:"d M Y H:i" }}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="comment-type">
+
+                            {% if comment.comment_type == 'INTERNAL' %}
+
+                                🔒 Internal Note
+
+                            {% else %}
+
+                                💬 Public Reply
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="comment-message">
+
+                            {{ comment.message|linebreaks }}
+
+                        </div>
+
+                    </div>
+
+                {% empty %}
+
+                    <p>
+                        No conversation yet.
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- ADD COMMENT -->
+
+            <div class="panel">
+
+                <h2>Add Update</h2>
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <input
+                        type="hidden"
+                        name="action"
+                        value="comment"
+                    >
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Update Type
+                        </label>
+
+                        <select name="comment_type">
+
+                            <option value="PUBLIC">
+                                Public Reply
+                            </option>
+
+                            <option value="INTERNAL">
+                                Internal Note
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Message
+                        </label>
+
+                        <textarea
+                            name="message"
+                            placeholder="Enter your update..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="button"
+                    >
+                        Add Update
+                    </button>
+
+                </form>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- ====================================== -->
+        <!-- RIGHT COLUMN -->
+        <!-- ====================================== -->
+
+        <div>
+
+
+            <!-- UPDATE TICKET -->
+
+            <div class="panel">
+
+                <h2>Update Ticket</h2>
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <input
+                        type="hidden"
+                        name="action"
+                        value="update_ticket"
+                    >
+
+
+                    <!-- STATUS -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Status
+                        </label>
+
+                        <select name="status">
+
+                            {% for value, label in status_choices %}
+
+                                <option
+                                    value="{{ value }}"
+                                    {% if ticket.status == value %}
+                                        selected
+                                    {% endif %}
+                                >
+
+                                    {{ label }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PRIORITY -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Priority
+                        </label>
+
+                        <select name="priority">
+
+                            {% for value, label in priority_choices %}
+
+                                <option
+                                    value="{{ value }}"
+                                    {% if ticket.priority == value %}
+                                        selected
+                                    {% endif %}
+                                >
+
+                                    {{ label }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- ASSIGNED TO -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Assigned To
+                        </label>
+
+                        <select name="assigned_to">
+
+                            <option value="">
+                                Unassigned
+                            </option>
+
+                            {% for user in users %}
+
+                                <option
+                                    value="{{ user.id }}"
+                                    {% if ticket.assigned_to and ticket.assigned_to.id == user.id %}
+                                        selected
+                                    {% endif %}
+                                >
+
+                                    {{ user.username }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="button"
+                    >
+                        Save Changes
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- ACTIVITY HISTORY -->
+
+            <div class="panel">
+
+                <h2>Activity History</h2>
+
+                {% for activity in activities %}
+
+                    <div class="activity">
+
+                        <div class="activity-description">
+
+                            {{ activity.description }}
+
+                        </div>
+
+                        <div class="activity-date">
+
+                            {% if activity.user %}
+                                {{ activity.user.username }} ·
+                            {% endif %}
+
+                            {{ activity.created_at|date:"d M Y H:i" }}
+
+                        </div>
+
+                    </div>
+
+                {% empty %}
+
+                    <p>
+                        No activity recorded.
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- TASKS -->
+
+            <div class="panel">
+
+                <h2>Tasks</h2>
+
+                {% for task in tasks %}
+
+                    <div class="activity">
+
+                        <strong>
+                            {{ task.title }}
+                        </strong>
+
+                        <div class="activity-date">
+
+                            Assigned:
+
+                            {% if task.assigned_to %}
+                                {{ task.assigned_to.username }}
+                            {% else %}
+                                Unassigned
+                            {% endif %}
+
+                            <br>
+
+                            Priority:
+                            {{ task.get_priority_display }}
+
+                            <br>
+
+                            Status:
+                            {{ task.get_status_display }}
+
+                        </div>
+
+                        {% if task.description %}
+
+                            <p style="margin-top:8px;">
+
+                                {{ task.description }}
+
+                            </p>
+
+                        {% endif %}
+
+                    </div>
+
+                {% empty %}
+
+                    <p>
+                        No tasks have been created for this ticket.
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
