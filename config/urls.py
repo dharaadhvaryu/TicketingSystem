@@ -30,7 +30,7 @@ urlpatterns = [
     path(
         '',
         dashboard,
-        name='index'
+        name='dashboard'
     ),
 
     path(
