@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 	'accounts',
 	'tickets',
 	'tasks',
+    'index',
 	'dashboard'
 ]
 
