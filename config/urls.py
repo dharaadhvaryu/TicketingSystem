@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from dashboard.views import dashboard
+from index.views import index
 
 
 urlpatterns = [
@@ -28,11 +29,16 @@ urlpatterns = [
     ),
 
     path(
-        '',
+        'dashboard',
         dashboard,
         name='dashboard'
     ),
-
+    path( '',
+         include('index.urls')
+    ),
+    path(
+        '', dashboard,name='index'
+    ),
     path(
         'tickets/',
         include('tickets.urls')
