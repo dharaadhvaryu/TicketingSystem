@@ -1,2 +1,19 @@
 # TicketingSystem
 Ticketing system for issued request and problems 
+<html>
+<body>
+<div style="padding: 40px; text-align: center;">
+
+    <h1>Welcome to Service Desk</h1>
+
+    <p>Service Desk homepage is working.</p>
+
+    <a href="{% url 'dashboard' %}">
+        Go to Dashboard
+    </a>
+
+</div>
+</html>
+
+
+</body>
